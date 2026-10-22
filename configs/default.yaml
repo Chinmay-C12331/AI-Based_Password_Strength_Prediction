@@ -1,0 +1,57 @@
+# AI-Based Password Strength Prediction Configuration
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  models_dir: "models"
+  results_dir: "results"
+  export_dir: "models/export"
+  web_dir: "web"
+  wordlist_file: "data/wordlist_small.txt"
+
+data:
+  max_len: 32
+  max_clean_len: 64
+  train_ratio: 0.80
+  val_ratio: 0.10
+  test_ratio: 0.10
+  folds: 5
+  class_thresholds: [3.0, 6.0, 8.0, 10.0]
+
+attackers:
+  markov_order: 4
+  mc_samples: 1000000
+  smoothing: "witten_bell"
+
+features:
+  use_zxcvbn_feature: true
+  top_blocklist_k: 10000
+
+model:
+  embed_dim: 32
+  vocab_size: 98
+  lstm_layers: 2
+  lstm_units: 128
+  feature_mlp: 64
+  dense: 128
+  dropout: 0.3
+  use_features: true
+  use_attention: true
+
+training:
+  optimizer: "adam"
+  lr: 0.001
+  batch_size: 512
+  max_epochs: 30
+  early_stop_patience: 3
+  grad_clip: 1.0
+  seeds: [0, 1, 2, 3, 4]
+
+loss:
+  huber_delta: 1.0
+  over_weight_alpha: 2.0
+  lambda_ce: 0.5
+  asymmetric: true
+
+benchmark:
+  eval_samples: 5000
+  latency_samples: 10000

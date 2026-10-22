@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pwdstrength"
+version = "0.1.0"
+description = "AI-Based Password Strength Prediction Using a Hybrid Neural and Pattern-Aware Guessability Model"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+full = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+    "torch",
+    "onnx",
+    "onnxruntime",
+    "zxcvbn",
+    "xgboost",
+    "matplotlib",
+    "shap",
+    "fastapi",
+    "uvicorn",
+    "pytest",
+]
+test = [
+    "pytest",
+]
+
+[project.scripts]
+pwd = "pwdstrength.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

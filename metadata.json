@@ -1,0 +1,6 @@
+{
+  "name": "pwd-strength-ai",
+  "description": "AI-Based Password Strength Prediction Using a Hybrid Neural and Pattern-Aware Guessability Model (Research Prototype & Client-Side Inference)",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
