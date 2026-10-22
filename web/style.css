@@ -1,0 +1,220 @@
+/* Modern clean styling for standalone static web client */
+:root {
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #3b82f6;
+  --border: #334155;
+  --level-0: #ef4444;
+  --level-1: #f97316;
+  --level-2: #eab308;
+  --level-3: #10b981;
+  --level-4: #06b6d4;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 620px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.password-input {
+  width: 100%;
+  padding: 14px 48px 14px 16px;
+  font-size: 1.05rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0b1120;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s ease;
+  font-family: monospace;
+}
+
+.password-input:focus {
+  border-color: var(--accent);
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.85rem;
+}
+
+.strength-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.strength-segment {
+  height: 8px;
+  border-radius: 4px;
+  background: #334155;
+  transition: background-color 0.25s ease;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.level-badge {
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #334155;
+}
+
+.guess-count {
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.reasons-list {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.reasons-list li {
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid var(--accent);
+  margin-bottom: 6px;
+  border-radius: 0 6px 6px 0;
+}
+
+.occlusion-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 20px;
+  min-height: 40px;
+  padding: 8px;
+  background: #0b1120;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.char-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 38px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  background: #1e293b;
+  position: relative;
+}
+
+.char-box.hurts-most {
+  background: #7f1d1d;
+  color: #fecaca;
+  border: 1px solid #ef4444;
+}
+
+.char-box.hurts-moderate {
+  background: #78350f;
+  color: #fef08a;
+  border: 1px solid #eab308;
+}
+
+.conservative-floor {
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.privacy-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #10b981;
+}

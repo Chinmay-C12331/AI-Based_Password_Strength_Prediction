@@ -1,0 +1,120 @@
+# pwd-strength-ai
+
+**AI-Based Password Strength Prediction Using a Hybrid Neural and Pattern-Aware Guessability Model**
+*IEEE-Style Research Prototype & Zero-Leakage Client-Side Inference*
+
+---
+
+## 1. Overview & Research Motivation
+
+Accurate password strength meters must estimate the true effort required for an adversary to guess a user credential ($G^*$) without giving users a dangerous false sense of security (overestimation). Traditional rule-based and composition-based meters (e.g., 8+ characters, uppercase, symbol) do not capture structural patterns, while heuristic tools like `zxcvbn` suffer from notable overestimation rates on novel pattern combinations.
+
+This repository provides the complete, reproducible research prototype described in the paper:
+- **Reference Attackers**: Ground-truth target $y = \log_{10}(G^*)$ derived as the minimum guess number between a frequency-rank dictionary attacker and a 4-gram character Markov chain scored via Monte Carlo estimation (Dell'Amico & Filippone, ACM CCS 2015).
+- **Out-of-Fold Labels**: 5-fold cross-validation labeling on the training split to guarantee zero label leakage.
+- **Hybrid Neural Architecture (`HybridStrengthNet`)**: A 2-layer Bidirectional LSTM with additive attention pooling over character tokens, fused with an MLP branch encoding a 22-dimensional pattern feature vector.
+- **Asymmetric Huber Loss**: Heavily penalizes overestimation ($\alpha = 2.0$) relative to underestimation to safeguard user accounts.
+- **Client-Side ONNX INT8 Deployment**: 100% on-device browser inference (< 1 ms per password, ~600 KB model size) ensuring credentials never touch a network.
+
+---
+
+## 2. Ethics and Responsible Use
+
+1. **Zero Logging**: Passwords entered into the API or Web interface are processed entirely in-memory or on the client device. They are NEVER written to disk, telemetry logs, or remote databases.
+2. **No Credential Harvesting or Cracking**: This prototype does not implement password cracking, hash inversion, credential stuffing, or targeted account exploitation.
+3. **Privacy of Sampled Passwords**: In accordance with Project Rule 3, the Markov Monte Carlo attacker immediately discards all sampled password strings after computing log-probabilities; only sorted float values and prefix sums are retained in memory.
+4. **Data Hygiene**: All input corpora have usernames, emails, and control characters stripped during cleaning.
+
+---
+
+## 3. Installation & Quickstart
+
+### Prerequisites
+- Python 3.10+ (tested on Python 3.11)
+- Node.js 18+ (for client-side parity tests and Vite dev server)
+
+```bash
+# Setup environment and directories
+make setup
+
+# Run complete end-to-end pipeline (Data -> Labels -> Features -> Baselines -> Train -> Eval -> Export -> Benchmark)
+make all
+```
+
+---
+
+## 4. Research Data Instructions
+
+Put your real, publicly available password research corpora in `data/raw/`:
+- Accepted formats: one password per line, or `count<space>password` per line.
+- Examples: `data/raw/rockyou.txt`, `data/raw/myspace.txt`.
+
+> **CRITICAL WARNING ON SYNTHETIC DATA:**
+> The included generator (`python3 scripts/make_synthetic.py`) produces `data/raw/synthetic_demo.txt` for smoke tests and CI/CD validation. **Never report numbers from synthetic data in published papers.** All paper tables must be derived from genuine research corpora.
+
+---
+
+## 5. Reproducing Paper Tables & Figures
+
+Every script accepts `--config configs/default.yaml` and `--seed <int>`.
+
+```bash
+# Step 1: Prepare and clean corpus
+python3 scripts/prepare_data.py --config configs/default.yaml --corpus synthetic_demo --seed 42
+
+# Step 2: Generate Out-Of-Fold reference labels (K=5)
+python3 scripts/make_labels.py --config configs/default.yaml --corpus synthetic_demo --seed 42
+
+# Step 3: Extract 22 pattern features & fit FeatureScaler
+python3 scripts/extract_features.py --config configs/default.yaml --corpus synthetic_demo
+
+# Step 4: Evaluate Baselines B1 to B4
+python3 scripts/run_baselines.py --config configs/default.yaml --corpus synthetic_demo --seed 42
+
+# Step 5: Train proposed HybridStrengthNet and BiLSTM (B5) across 5 seeds
+python3 scripts/train.py --config configs/default.yaml --corpus synthetic_demo
+
+# Step 6: Generate paper evaluation tables (Table III, IV, Cross-site) and Figures
+python3 scripts/evaluate.py --config configs/default.yaml --corpus synthetic_demo
+
+# Step 7: Export to ONNX FP32 and INT8, validate numerical parity, benchmark latency (Table V)
+python3 scripts/export_onnx.py --config configs/default.yaml
+python3 scripts/benchmark.py --config configs/default.yaml
+
+# Step 8: Sync paper tables and hypothesis verification
+python3 scripts/paper_results.py --config configs/default.yaml
+```
+
+Generated outputs:
+- `results/paper_tables.md` (Markdown tables for direct copy-paste into IEEE paper)
+- `results/table_overall.tex` (LaTeX booktabs Table III)
+- `results/table_ablation.tex` (LaTeX booktabs Table IV)
+- `results/table_deploy.tex` (LaTeX booktabs Table V)
+- `results/hypotheses.md` (Formal evaluation of hypotheses H1, H2, H3)
+- `results/fig_guess_curve.{png,pdf}` (Empirical cracking curve)
+- `results/fig_confusion_proposed.{png,pdf}` (5x5 confusion matrix)
+- `results/fig_scatter.{png,pdf}` (Predicted vs True hexbin plot)
+- `results/fig_oer_by_pattern.{png,pdf}` (Overestimation rates across pattern categories)
+
+---
+
+## 6. Running the Web Demo
+
+You can run the web client in two ways:
+1. **Interactive Research Suite (Vite dev server)**:
+   ```bash
+   npm run dev
+   ```
+   Open `http://localhost:3000` to interact with the full dashboard, live meter, occlusion explanation strip, 22-feature inspector, and paper tables.
+2. **Static Standalone Demo (`web/`)**:
+   ```bash
+   cd web && python3 -m http.server 8000
+   ```
+   Open `http://localhost:8000/index.html`.
+
+---
+
+## 7. Hardware & Environment Notes
+
+- All CPU latency benchmarks and INT8 inferences are verified on standard x86_64 architecture without requiring specialized GPU accelerators.
+- Hardware specifications and version records are automatically recorded in `results/hardware.json`.

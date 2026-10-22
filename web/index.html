@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pwd-strength-ai | Client-Side Password Guessability Prototype</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Pinned vendor dependencies for client-side execution -->
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/ort.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
+  <script src="features.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        pwd-strength-ai
+      </h1>
+      <p class="subtitle">AI-Based Guessability Model: Hybrid Neural &amp; Pattern-Aware Architecture</p>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="passwordInput" class="password-input" placeholder="Type a password to test..." autofocus autocomplete="off" spellcheck="false" />
+      <button id="toggleBtn" class="toggle-btn" aria-label="Toggle password visibility">Show</button>
+    </div>
+
+    <!-- 5-segment strength bar -->
+    <div class="strength-bar" id="strengthBar">
+      <div class="strength-segment" id="seg0"></div>
+      <div class="strength-segment" id="seg1"></div>
+      <div class="strength-segment" id="seg2"></div>
+      <div class="strength-segment" id="seg3"></div>
+      <div class="strength-segment" id="seg4"></div>
+    </div>
+
+    <!-- Level & Guess Count -->
+    <div class="stats-row">
+      <div class="level-badge" id="levelBadge">Start typing...</div>
+      <div class="guess-count" id="guessCount">~10<sup>0.0</sup> guesses</div>
+    </div>
+
+    <!-- Conservative Floor Comparison -->
+    <div class="conservative-floor" id="floorLine">
+      <strong>Conservative Floor Policy:</strong> Level will reflect min(Model, zxcvbn), with immediate Level 0 override for top-10k blocklisted credentials.
+    </div>
+
+    <!-- Top 3 Structural Reasons -->
+    <div class="section-title">Why this score? (Key Indicators)</div>
+    <ul class="reasons-list" id="reasonsList">
+      <li>Type a password above to inspect pattern features.</li>
+    </ul>
+
+    <!-- Occlusion Explanation Strip -->
+    <div class="section-title">Which characters hurt? (Occlusion Analysis)</div>
+    <div class="occlusion-strip" id="occlusionStrip">
+      <span style="font-size: 0.8rem; color: #64748b; padding: 4px;">Each character will be highlighted based on how much its removal/replacement increases the guessability score.</span>
+    </div>
+
+    <!-- Footer with Latency and Privacy Statement -->
+    <div class="footer">
+      <div class="privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>Your password is processed in this browser and is never sent anywhere.</span>
+      </div>
+      <div id="latencyLabel">Inference: -- ms</div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

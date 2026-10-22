@@ -1,13 +1,14 @@
 .PHONY: setup data labels features baselines train eval export web benchmark test all paper-results clean
 
 PYTHON ?= python3
+export PYTHONPATH := src:$(PYTHONPATH)
 CONFIG ?= configs/default.yaml
 SEED ?= 42
 
 setup:
 	@echo "Setting up pwdstrength environment..."
 	mkdir -p data/raw data/processed models/export results/preds results/train_logs web/model tests/web_parity
-	$(PYTHON) -m pip install -e . || true
+	$(PYTHON) -m pip install --break-system-packages -e . || true
 
 data:
 	@echo "Preparing synthetic dataset and corpus..."

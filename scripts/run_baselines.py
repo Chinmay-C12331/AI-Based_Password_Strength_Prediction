@@ -2,6 +2,7 @@
 """Run and evaluate Baselines B1 to B4, saving prediction parquets and CSVs."""
 
 import os
+import json
 import argparse
 import numpy as np
 import pandas as pd
@@ -41,14 +42,16 @@ def main():
     os.makedirs(preds_dir, exist_ok=True)
 
     # Load labels
-    train_labels_file = os.path.join(proc_dir, "labels_train.json")
     val_labels_file = os.path.join(proc_dir, "labels_val.json")
     test_labels_file = os.path.join(proc_dir, "labels_test.json")
+    train_labels_file = os.path.join(proc_dir, "labels_train.json")
 
     with open(train_labels_file, "r") as f:
-        train_df = pd.DataFrame(json.load(f) if hasattr(json, "load") else pd.read_json(f))
-    val_df = pd.read_json(val_labels_file)
-    test_df = pd.read_json(test_labels_file)
+        train_df = pd.DataFrame(json.load(f))
+    with open(val_labels_file, "r") as f:
+        val_df = pd.DataFrame(json.load(f))
+    with open(test_labels_file, "r") as f:
+        test_df = pd.DataFrame(json.load(f))
 
     train_pws = train_df["password"].tolist()
     train_counts = train_df["count"].tolist()
@@ -135,5 +138,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import json
     main()

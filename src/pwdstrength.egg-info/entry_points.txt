@@ -1,0 +1,2 @@
+[console_scripts]
+pwd = pwdstrength.cli:main
