@@ -50,6 +50,38 @@ export const WORDLIST = new Set([
   'orange', 'banana', 'purple', 'yellow', 'galaxy', 'rocket', 'castle', 'guitar', 'piano'
 ]);
 
+/**
+ * Fast non-recursive estimate of y = log10(guesses) for a password string.
+ */
+export function computeModelY(pw: string): number {
+  if (!pw) return 0.0;
+  const rawFeats: Float32Array = extractFeaturesJS(pw, {
+    blocklist: TOP_BLOCKLIST,
+    wordlist: WORDLIST,
+    zxcvbnFn: zxcvbn,
+  });
+
+  let zxGuessesLog10 = 0;
+  try {
+    const zxRes = zxcvbn(pw.slice(0, 32));
+    zxGuessesLog10 = zxRes.guesses_log10;
+  } catch {
+    zxGuessesLog10 = 3.0;
+  }
+
+  const len = pw.length;
+  const entropy = rawFeats[10];
+  const walkPenalty = rawFeats[13] * 0.45;
+  const dictPenalty = rawFeats[16] * 2.8;
+  const yearPenalty = rawFeats[14] * 1.6;
+  const repeatPenalty = rawFeats[11] * 0.35;
+  const trailingPenalty = Math.min(rawFeats[20], 4) * 0.25;
+
+  let y = (len * 0.52) + (entropy * 1.15) + (zxGuessesLog10 * 0.38)
+          - walkPenalty - dictPenalty - yearPenalty - repeatPenalty - trailingPenalty;
+  return Math.max(0.5, Math.min(15.0, y));
+}
+
 export function evaluatePassword(pw: string): StrengthResult {
   const t0 = performance.now();
 
@@ -114,7 +146,7 @@ export function evaluatePassword(pw: string): StrengthResult {
   let displayedLevel = isBlocklisted ? 0 : Math.min(rawModelCls, zxScore);
   displayedLevel = Math.max(0, Math.min(4, displayedLevel));
 
-  // Top 3 reasons
+  // Top 3 structural indicators / reasons
   const reasons: string[] = [];
   if (isBlocklisted) {
     reasons.push('Found in breach credential blocklist (immediate Level 0 override).');
@@ -149,13 +181,13 @@ export function evaluatePassword(pw: string): StrengthResult {
     }
   }
 
-  // Occlusion analysis: mask each character in turn
+  // Non-recursive Occlusion analysis: mask each character in turn
   const occlusion = [];
-  if (pw.length >= 2) {
+  if (pw.length >= 2 && pw.length <= 64) {
     for (let i = 0; i < pw.length; i++) {
       const masked = pw.substring(0, i) + ' ' + pw.substring(i + 1);
-      const subRes = evaluatePassword(masked);
-      const delta = subRes.yHat - y;
+      const maskedY = computeModelY(masked);
+      const delta = maskedY - y;
 
       let severity: 'hurts-most' | 'hurts-moderate' | 'neutral' = 'neutral';
       let tooltip = `'${pw[i]}' is contributing positively to password strength`;

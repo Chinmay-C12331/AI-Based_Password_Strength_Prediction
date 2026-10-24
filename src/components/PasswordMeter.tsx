@@ -146,7 +146,7 @@ export const PasswordMeter: React.FC<PasswordMeterProps> = () => {
                 Level {result.displayedLevel}: {result.levelName}
               </span>
               <span className="text-xs text-slate-400 font-mono">
-                $y = \log_{{10}}(G^*) \approx$ <strong className="text-slate-200">{result.yHat.toFixed(2)}</strong>
+                {'y = log₁₀(G*) ≈'} <strong className="text-slate-200">{result.yHat.toFixed(2)}</strong>
               </span>
             </div>
 
@@ -191,7 +191,7 @@ export const PasswordMeter: React.FC<PasswordMeterProps> = () => {
                 ) : result.rawModelCls > result.zxcvbnScore ? (
                   <span>
                     Model predicted Level {result.rawModelCls}, but reference <code>zxcvbn</code> scored Level{' '}
-                    {result.zxcvbnScore}. Under the paper's conservative policy ($\min(\text{{Model}}, \text{{zxcvbn}})$),
+                    {result.zxcvbnScore}. Under the paper's conservative policy (min(Model, zxcvbn)),
                     displayed score is <strong>Level {result.displayedLevel}</strong> to prevent overestimation.
                   </span>
                 ) : (

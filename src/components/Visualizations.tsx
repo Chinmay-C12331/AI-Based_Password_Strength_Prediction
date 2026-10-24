@@ -65,7 +65,7 @@ export const Visualizations: React.FC = () => {
               <div>
                 <h3 className="text-base font-bold text-white">Fig 1: Empirical Guessability Curves</h3>
                 <p className="text-xs text-slate-400">
-                  Cumulative cracked fraction of test passwords vs $\log_{{10}}$ adversarial guess attempts.
+                  Cumulative cracked fraction of test passwords vs log₁₀ adversarial guess attempts.
                 </p>
               </div>
               <div className="flex items-center gap-4 text-xs font-mono">
@@ -253,8 +253,7 @@ export const Visualizations: React.FC = () => {
             <div>
               <h3 className="text-base font-bold text-white">Fig 3: Ground Truth vs Predicted Guessability</h3>
               <p className="text-xs text-slate-400">
-                Hexbin density plot of $y_{{true}} = \log_{{10}}(G^*)$ vs $\hat{{y}}$. The red dashed diagonal represents
-                ideal calibration ($y = \hat{{y}}$).
+                Hexbin density plot of True y vs Predicted ŷ. The red dashed diagonal represents ideal calibration (y = ŷ).
               </p>
             </div>
 
@@ -290,8 +289,8 @@ export const Visualizations: React.FC = () => {
               </svg>
             </div>
             <p className="text-xs text-slate-400 italic">
-              Notice the asymmetric distribution: errors cluster below the line ($\hat{{y}} &lt; y_{{true}}$) due to the
-              asymmetric Huber penalty ($\alpha = 2.0$), strictly preventing dangerous overestimation.
+              Notice the asymmetric distribution: errors cluster below the line (ŷ &lt; y_true) due to the
+              asymmetric Huber penalty (α = 2.0), strictly preventing dangerous overestimation.
             </p>
           </div>
         )}

@@ -239,8 +239,8 @@ export {
   computeLongestSequentialRun,
 };
 
-if (typeof module !== "undefined" && module.exports) {
-  module.exports = {
+if (typeof globalThis !== "undefined" && globalThis.module && globalThis.module.exports) {
+  globalThis.module.exports = {
     FEATURE_NAMES,
     extractFeaturesJS,
     encodeCharsJS,

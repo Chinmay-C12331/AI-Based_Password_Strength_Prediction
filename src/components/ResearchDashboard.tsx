@@ -34,7 +34,7 @@ export const ResearchDashboard: React.FC = () => {
 
           <div className="flex items-center gap-2">
             <span className="text-xs bg-slate-800/80 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700">
-              Target: $y = \log_{{10}}(G^*)$
+              Target: y = log₁₀(G*)
             </span>
           </div>
         </div>
@@ -112,7 +112,7 @@ export const ResearchDashboard: React.FC = () => {
                 <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-800">
                   <tr>
                     <th className="py-3 px-4">Method / Architecture</th>
-                    <th className="py-3 px-4">MAE ($\log_{{10}}$) &darr;</th>
+                    <th className="py-3 px-4">MAE (log₁₀) &darr;</th>
                     <th className="py-3 px-4">Spearman $\rho$ &uarr;</th>
                     <th className="py-3 px-4">Macro-$F_1$ &uarr;</th>
                     <th className="py-3 px-4">OER (%) &darr;</th>
@@ -191,7 +191,7 @@ export const ResearchDashboard: React.FC = () => {
                 <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-800">
                   <tr>
                     <th className="py-3 px-4">Ablation Variant</th>
-                    <th className="py-3 px-4">MAE ($\text{{mean}} \pm \text{{std}}$) &darr;</th>
+                    <th className="py-3 px-4">MAE (mean &plusmn; std) &darr;</th>
                     <th className="py-3 px-4">Macro-$F_1$ &uarr;</th>
                     <th className="py-3 px-4">OER (%) &darr;</th>
                     <th className="py-3 px-4">OER-2 (%) &darr;</th>
@@ -311,7 +311,7 @@ export const ResearchDashboard: React.FC = () => {
                 <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-800">
                   <tr>
                     <th className="py-3 px-4">Method</th>
-                    <th className="py-3 px-4">MAE ($\log_{{10}}$)</th>
+                    <th className="py-3 px-4">MAE (log₁₀)</th>
                     <th className="py-3 px-4">Spearman $\rho$</th>
                     <th className="py-3 px-4">Macro-$F_1$</th>
                     <th className="py-3 px-4">OER (%)</th>
